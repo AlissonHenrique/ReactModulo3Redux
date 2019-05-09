@@ -3,9 +3,9 @@ import createSagaMiddleware from 'redux-saga';
 import reducers from './reducers';
 import sagas from './sagas';
 
-const sagaMidlleware = createSagaMiddleware();
-
-const middlewares = [sagaMidlleware];
+const sagaMonitor = process.env.NODE_ENV === 'production' ? console.tron.createSagaMonitor() : null;
+const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
+const middlewares = [sagaMiddleware];
 
 const composer = process.env.NODE_ENV === 'development'
   ? compose(
@@ -16,6 +16,6 @@ const composer = process.env.NODE_ENV === 'development'
 
 const store = createStore(reducers, composer);
 
-sagaMidlleware.run(sagas);
+sagaMiddleware.run(sagas);
 
 export default store;
